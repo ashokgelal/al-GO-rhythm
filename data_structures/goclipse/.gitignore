@@ -7,3 +7,5 @@ linkedlist/src/pkg/list/*.a
 linkedlist/pkg/pkg.a
 .metadata/*
 .metadata/.*
+linkedlist/src/pkg/list/_test/
+linkedlist/src/pkg/list/_test*.go

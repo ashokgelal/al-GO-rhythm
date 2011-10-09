@@ -21,31 +21,30 @@ func New() *LinkedList {
 	return list
 }
 
-func (list *LinkedList) createNewNode(mark *Node, val ComparableNodeValue) *Node {
-	f := &Node{prev: mark.prev, next: mark.next, Value: val, list: list}
-	return f;
-}
-
-func (list *LinkedList) Append(val ComparableNodeValue) {
-	node := list.createNewNode(list.head, val)
+func (list *LinkedList) Append(val ComparableNodeValue) *Node{
+	node := &Node{prev: list.head.prev, next: list.head.next, Value: val, list: list }
 	list.head.prev = node
 	node.prev.next = node
 	list.length++
+	return node
 }
 
-func (list *LinkedList) Insert(val ComparableNodeValue, index int) (err os.Error) {
+func (list *LinkedList) Insert(val ComparableNodeValue, index int) (node *Node, err os.Error) {
 	if index < 0 || index > list.length {
-		return os.NewError("Index out of bounds.")
+		return nil, os.NewError("Index out of bounds.")
 	}
 
-	current := list.head.next
+	current := list.head
 
 	for i := 0; i < index; i++ {
 		current = current.next
 	}
-	_ = list.createNewNode(current, val)
+	
+	temp := &Node{prev: current, next: current.next, Value: val, list: list }
+	temp.next.prev = temp
+	current.next = temp
 	list.length++
-	return nil
+	return temp, nil
 }
 
 func (list *LinkedList) Clear() {
@@ -114,7 +113,7 @@ func (list *LinkedList) RemoveElement(val ComparableNodeValue) bool {
 
 	for i := 0; i < list.length; i++ {
 		current = current.next
-		if current.Value.Equals(&val) {
+		if current.Value.Equals(val) {
 			current.prev.next = current.next
 			current.next.prev = current.prev
 			list.length--
