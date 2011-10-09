@@ -1,0 +1,9 @@
+6.out
+*.6
+linkedlist/pkg/darwin_amd64/*
+linkedlist/src/pkg/list/*.6
+linkedlist/src/pkg/list/*.out
+linkedlist/src/pkg/list/*.a
+linkedlist/pkg/pkg.a
+.metadata/*
+.metadata/.*
