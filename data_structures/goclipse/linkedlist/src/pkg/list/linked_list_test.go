@@ -18,8 +18,14 @@ func checkListLen(t *testing.T, l *LinkedList, n int) {
 	}
 }
 
-func (me MyData) toString() string{
+func (me MyData) String() string{
 	return string (me.data)
+}
+
+func checkNodeExistence(t *testing.T, l *LinkedList, n Any, b bool){
+	if val := l.Exists(n.(*MyData)); val != b{
+		t.Errorf("Node %v's existence: %v, want %v", &n, val, b)
+	}
 }
 
 func TestList(t *testing.T) {
@@ -30,20 +36,69 @@ func TestList(t *testing.T) {
 	n1 := l.Append(d1)
 	checkListPointers(t, l, []*Node{n1})
 	checkListLen(t, l, 1)
+	
 	l.RemoveElement(d1)
 	checkListPointers(t, l, []*Node{})
 	checkListLen(t, l, 0)
+	checkNodeExistence(t, l, d1, false)
+	
 	n1 = l.Append(d1)
+	
 	d2 := &(MyData{2})
 	n2 := l.Append(d2)
+	
 	d3 := &(MyData{3})
 	n3 := l.Append(d3)
+	
 	d4 := &(MyData{4})
 	n4,_ := l.Insert(d4, 0)
+	
 	d5 := &(MyData{5})
 	n5 := l.Append(d5)
-	checkListPointers(t, l, []*Node{n4, n1, n2, n3, n5})
-	checkListLen(t, l, 5)
+	
+	d6 := &(MyData{6})
+	n6,_ := l.Insert(d6, 0)
+	checkListPointers(t, l, []*Node{n6, n4, n1, n2, n3, n5})
+	checkListLen(t, l, 6)
+	
+	d7,_ := l.GetFirst()
+	checkData(t, d7, d6)
+}
+
+func TestExtending(t *testing.T){
+	l1 := New()
+	//l2 := New()
+	
+	d1 := &(MyData{1})
+	_ = l1.Append(d1)
+	d2 := &(MyData{2})
+	_ = l1.Append(d2)
+	d3 := &(MyData{3})
+	_ = l1.Append(d3)
+	checkList(t, l1, []ComparableNodeValue{d1, d2, d3})
+}
+
+
+func checkData(t *testing.T, cn ComparableNodeValue, want *MyData){
+	have := cn.(*MyData)
+	if have.data != want.data {
+		t.Errorf("MyData value = %v, want %v", have, want)
+	}
+}
+
+func checkList(t *testing.T, l *LinkedList, es []ComparableNodeValue){
+	if l.Len() != len(es){
+		t.Errorf("list has len=%v, want %v", l.Len(), len(es))
+		return
+	}
+	i := 0
+	for e := l.head.next; e != l.head.prev; e = e.next{
+		le := e.Value.(*MyData)
+		if le != es[i].(*MyData){
+			t.Errorf("node #%d has value=%v, want %v", i, le, es[i])
+		}
+		i++
+	}
 }
 
 func checkListPointers(t *testing.T, l *LinkedList, es []*Node) {
