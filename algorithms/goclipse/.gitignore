@@ -1,0 +1,11 @@
+6.out
+*.6
+*/pkg/darwin_amd64/*
+*/src/pkg/*/*.6
+*/src/pkg/*/*.out
+*/src/pkg/*/*.a
+*/pkg/pkg.a
+.metadata/*
+.metadata/.*
+*/src/pkg/*/_test/
+*/src/pkg/*/_test*.go
